@@ -2,7 +2,21 @@ import Intro from '@/components/Intro';
 import Post from '@/components/Post';
 import Head from 'next/head';
 
-export default function Home() {
+import { getSortedPostsData } from '@/lib/posts';
+
+interface PostInfo {
+  id: string
+  title: string
+  date: string
+  resume: string
+}
+
+interface HomeProps {
+  posts: PostInfo[]
+}
+
+
+export default function Home({ posts }: HomeProps) {
   return (
     <>
       <Head>
@@ -12,23 +26,28 @@ export default function Home() {
         <Intro />
 
         <section className="grid gap-6 pt-12">
-          <Post
-            title="Título legal da postagem massa"
-            date={new Date()}
-            resume="Resumo da postagem massa um pouco maior"
-          />
-          <Post
-            title="Título legal da postagem"
-            date={new Date()}
-            resume="Resumo da postagem massa"
-          />
-          <Post
-            title="Título legal da postagem"
-            date={new Date()}
-            resume="Resumo da postagem massa"
-          />
+          {
+            posts.map(({id, title, date, resume}) => (
+              <Post
+                key={id}
+                title={title}
+                date={new Date(date)}
+                resume={resume}
+              />
+            ))
+          }
         </section>
       </main>
     </>
   );
+}
+
+export async function getStaticProps() {
+  const posts = getSortedPostsData();
+
+  return {
+    props: {
+      posts
+    }
+  };
 }
