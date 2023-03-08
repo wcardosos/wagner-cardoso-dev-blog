@@ -1,20 +1,12 @@
 import Intro from '@/components/Intro';
-import Post from '@/components/Post';
+import PostComponent from '@/components/Post';
+import { Post } from '@/entities/Post';
+import { GetAllPosts } from '@/services/posts/GetAllPosts';
+import { SortPostsByDate } from '@/services/posts/SortPostsByDate';
 import Head from 'next/head';
-
-import { getSortedPostsData } from '@/lib/posts';
-
-interface PostInfo {
-  id: string
-  title: string
-  date: string
-  resume: string
-}
-
 interface HomeProps {
-  posts: PostInfo[]
+  posts: Post[]
 }
-
 
 export default function Home({ posts }: HomeProps) {
   return (
@@ -28,7 +20,7 @@ export default function Home({ posts }: HomeProps) {
         <section className="grid gap-6 pt-12">
           {
             posts.map(({id, title, date, resume}) => (
-              <Post
+              <PostComponent
                 key={id}
                 title={title}
                 date={new Date(date)}
@@ -43,11 +35,16 @@ export default function Home({ posts }: HomeProps) {
 }
 
 export async function getStaticProps() {
-  const posts = getSortedPostsData();
+  const getAllPostsService = new GetAllPosts();
+  const sortPostsByDateService = new SortPostsByDate();
+  
+  const allPosts = getAllPostsService.execute();
+
+  const postsSorted = sortPostsByDateService.execute(allPosts);
 
   return {
     props: {
-      posts
+      posts: postsSorted
     }
   };
 }
