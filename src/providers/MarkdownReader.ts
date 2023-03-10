@@ -1,5 +1,5 @@
-import fs from 'fs';
 import matter from 'gray-matter';
+import { FileHandler } from './FileHandler';
 
 export interface Metadata {
   title: string
@@ -19,7 +19,7 @@ export class MarkdownReader {
   }
 
   private readFile(): string {
-    return fs.readFileSync(this.filePath, 'utf-8');
+    return FileHandler.readFile(this.filePath) as string;
   }
 
   private parseMetadata(content: string): Metadata {

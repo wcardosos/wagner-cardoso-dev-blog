@@ -1,6 +1,6 @@
-import { describe, expect, it, vi, Mocked } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { MarkdownReader } from '../../src/providers/MarkdownReader';
-import fs from 'fs';
+import { FileHandler } from '../../src/providers/FileHandler';
 
 vi.mock('fs', () => ({
   default: {
@@ -18,7 +18,8 @@ vi.mock('gray-matter', () => ({
 }));
 
 describe('Provider: MarkdownReader', () => {
-  const fsMock = fs as Mocked<typeof fs>;
+  const fileHandlerReadFileSpy = vi.spyOn(FileHandler, 'readFile');
+  fileHandlerReadFileSpy.mockReturnValue('markdown content');
 
   const markdownReader = new MarkdownReader('file path');
   
@@ -26,7 +27,7 @@ describe('Provider: MarkdownReader', () => {
     it('Should return the markdown metadata', () => {
       const metadata = markdownReader.getMetadata();
 
-      expect(fsMock.readFileSync).toHaveBeenCalledWith('file path', 'utf-8');
+      expect(fileHandlerReadFileSpy).toHaveBeenCalledWith('file path');
       expect(metadata).toEqual({
         title: 'Post title',
         date: '2023-03-04',
