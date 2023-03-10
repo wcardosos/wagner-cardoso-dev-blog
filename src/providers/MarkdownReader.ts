@@ -18,6 +18,14 @@ export class MarkdownReader {
     return metadata;
   }
 
+  getContent() {
+    const markdownContent = this.readFile();
+
+    const content = this.parseContent(markdownContent);
+
+    return content;
+  }
+
   private readFile(): string {
     return FileHandler.readFile(this.filePath) as string;
   }
@@ -30,5 +38,11 @@ export class MarkdownReader {
       date,
       resume
     };
+  }
+
+  private parseContent(content: string) {
+    const { content: contentParsed } = matter(content);
+
+    return contentParsed;
   }
 }

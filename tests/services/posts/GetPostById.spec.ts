@@ -9,20 +9,24 @@ describe('Service: GetPostById', () => {
   describe('execute', () => {
     it('Should return the post by id', () => {
       const markdownReaderGetMetadataSpy = vi.spyOn(MarkdownReader.prototype, 'getMetadata');
+      const markdownReaderGetContentSpy = vi.spyOn(MarkdownReader.prototype, 'getContent');
 
       markdownReaderGetMetadataSpy.mockReturnValue({
         title: 'Post 1',
         resume: 'Post 1 resume',
         date: '2023-03-07'
       });
+      markdownReaderGetContentSpy.mockReturnValue('markdown content');
 
       const post = getPostByIdService.execute('post-id');
 
       expect(MarkdownReader).toHaveBeenCalledWith(expect.stringContaining('/post-id.md'));
       expect(post).toEqual({
+        id: 'post-id',
         title: 'Post 1',
         resume: 'Post 1 resume',
-        date: '2023-03-07'
+        date: '2023-03-07',
+        content: 'markdown content'
       });
     });
   });

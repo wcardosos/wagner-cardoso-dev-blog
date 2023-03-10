@@ -3,4 +3,5 @@ export interface Post {
   title: string
   resume: string
   date: string
+  content?: string
 }

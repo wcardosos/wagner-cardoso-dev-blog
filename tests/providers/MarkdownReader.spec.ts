@@ -13,7 +13,8 @@ vi.mock('gray-matter', () => ({
       title: 'Post title',
       date: '2023-03-04',
       resume: 'Post resume'
-    }
+    },
+    content: 'content'
   })
 }));
 
@@ -33,6 +34,15 @@ describe('Provider: MarkdownReader', () => {
         date: '2023-03-04',
         resume: 'Post resume'
       });
+    });
+  });
+
+  describe('getContent', () => {
+    it('Should return the markdown content', () => {
+      const content = markdownReader.getContent();
+
+      expect(fileHandlerReadFileSpy).toHaveBeenCalledWith('file path');
+      expect(content).toBe('content');
     });
   });
 });
