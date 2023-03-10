@@ -4,6 +4,7 @@ import { Post } from '@/entities/Post';
 import { GetAllPosts } from '@/services/posts/GetAllPosts';
 import { SortPostsByDate } from '@/services/posts/SortPostsByDate';
 import Head from 'next/head';
+import Link from 'next/link';
 interface HomeProps {
   posts: Post[]
 }
@@ -20,12 +21,16 @@ export default function Home({ posts }: HomeProps) {
         <section className="grid gap-6 pt-12">
           {
             posts.map(({id, title, date, resume}) => (
-              <PostComponent
+              <Link
+                href={`/posts/${id}`}
                 key={id}
-                title={title}
-                date={new Date(date)}
-                resume={resume}
-              />
+              >
+                <PostComponent
+                  title={title}
+                  date={new Date(date)}
+                  resume={resume}
+                />
+              </Link>
             ))
           }
         </section>
